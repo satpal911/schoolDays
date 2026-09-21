@@ -1,13 +1,13 @@
 import jwt from 'jsonwebtoken'
-import { Director } from '../models/director.model.js'
+import { Principal } from '../models/principal.model.js'
 
-const directorAuthentication = async (req, res, next) => {
+const principalAuthentication = async (req, res, next) => {
   try {
     let token = null
     if (req.cookies?.token) {
       token = req.cookies.token
-    } else if (req.headers.authorization?.startsWith('Bearer')) {
-      token = req.headers.authorization.split('')[0]
+    } else if (req.headers.authorization?.startsWith('Bearer ')) {
+      token = req.headers.authorization.split(' ')[1]
     }
     if (!token) {
       return res.status(400).json({ message: 'User not found, please login' })
@@ -17,20 +17,24 @@ const directorAuthentication = async (req, res, next) => {
     try {
       decoded = jwt.verify(token, process.env.JWT_SECRET)
     } catch (error) {
-      res.status(500).json({
+      return res.status(401).json({
         status: 0,
-        message: 'Middleware authentication error'
+        message: 'Invalid or expired token'
       })
     }
 
-    const director = await Director.findById(decoded.id).select('-password')
-    if (!director) {
+    if (decoded.role !== 'principal') {
+      return res.status(403).json({ message: 'Principal access required' })
+    }
+
+    const principal = await Principal.findById(decoded.id).select('-password')
+    if (!principal) {
       return res.status(401).json({
         status: 0,
         message: 'User not found. Please log in again.'
       })
     }
-    req.director = director
+    req.principal = principal
     next()
   } catch (error) {
     res.status(500).json({
@@ -40,4 +44,4 @@ const directorAuthentication = async (req, res, next) => {
   }
 }
 
-export default directorAuthentication
+export default principalAuthentication

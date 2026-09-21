@@ -54,6 +54,11 @@ const loginDirector = async (req, res) => {
 const registerDirector = async(req,res) =>{
     const { name, email,  password } = req.body
     try {
+      const directorExists = await Director.exists({})
+      if (directorExists) {
+        return res.status(403).json({ message: "A director is already registered" })
+      }
+
       if(!name || !email  || !password ){
             return res.status(400).json({
         status:0,
@@ -76,7 +81,7 @@ const registerDirector = async(req,res) =>{
         res.status(201).json({
             status: 1,
             message: "Director registered successfully",
-            data: res.data
+            data: { id: newDirector._id, name: newDirector.name, email: newDirector.email }
         })
     } catch (error) {
         res.status(500).json({
@@ -86,4 +91,14 @@ const registerDirector = async(req,res) =>{
     }
 }
 
-export { loginDirector, registerDirector }
+const logoutDirector = async(req,res) =>{
+    try {
+        res.clearCookie('token');
+        res.status(200).json({ message: 'Director logged out successfully' });
+    } catch (error) {
+        console.error('Error in logoutDirector:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
+export { loginDirector, registerDirector, logoutDirector }

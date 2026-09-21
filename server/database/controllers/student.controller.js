@@ -1,17 +1,17 @@
 import {Student} from "../models/student.model.js";
 import cloudinary from "../utils/cloudinary.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import {School} from "../models/school.model.js";
-import {studentClass} from "../models/studentClass.model.js";
+import { studentClass as StudentClass } from "../models/studentClass.model.js";
 
 const registerStudent = async (req, res) => {
   try {
-    const { name, rollNumber, fatherName, motherName, dateOfBirth, school, studentClass, password } = req.body;
-    if(!name || !rollNumber || !fatherName || !motherName || !dateOfBirth || !school || !studentClass || !password ) {
+    const { name, rollNumber, fatherName, motherName, dateOfBirth, studentClass, password } = req.body || {};
+    if(!name || !rollNumber || !fatherName || !motherName || !dateOfBirth || !studentClass || !password ) {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
-    console.log(name, rollNumber, fatherName, motherName, dateOfBirth, school, studentClass, password   )
     if(isNaN(rollNumber)){
         return res.status(400).json({ message: 'Roll number must be a number' });       
     }
@@ -24,18 +24,15 @@ const registerStudent = async (req, res) => {
       return res.status(400).json({ message: 'Student with this roll number already exists' });
     }
 
-    let existSchool = await School.findOne({ name: school });
+    const schoolId = req.teacher.school;
+    const existSchool = await School.findById(schoolId);
     if (!existSchool) {
-        let createSchool = new School({ name: school ,
-            affiliatedBoard: { $in: ['CBSE', 'ICSE', 'State Board'] }
-        });
-        await createSchool.save();
+      return res.status(404).json({ message: 'Teacher school not found' });
     }
 
-    let existStudentClass = await studentClass.findOne({ name: studentClass });
+    let existStudentClass = await StudentClass.findOne({ name: studentClass, school: schoolId });
     if (!existStudentClass) {
-        let createStudentClass = new studentClass({ name: studentClass });
-        await createStudentClass.save();
+      existStudentClass = await StudentClass.create({ name: studentClass, school: schoolId });
     }
 
 
@@ -47,8 +44,8 @@ const registerStudent = async (req, res) => {
       fatherName,
       motherName,
       dateOfBirth,
-      school:existSchool ? existSchool._id : school,
-      studentClass:existStudentClass ? existStudentClass._id : studentClass,
+      school: existSchool._id,
+      studentClass: existStudentClass._id,
       password: hashedPassword
     });
 
@@ -71,7 +68,15 @@ const loginStudent = async (req, res) => {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
-    const student = await Student.findOne($AND({studentClass}, {rollNumber}));
+    const classRecord = await StudentClass.findOne({ name: studentClass });
+    if (!classRecord) {
+      return res.status(400).json({ message: 'Invalid class' });
+    }
+
+    const student = await Student.findOne({
+      studentClass: classRecord._id,
+      rollNumber
+    });
     if (!student) {
       return res.status(400).json({ message: 'Invalid roll number or class' });
     }
@@ -81,7 +86,9 @@ const loginStudent = async (req, res) => {
       return res.status(400).json({ message: 'Invalid password' });
     }
 
-    res.status(200).json({ message: 'Login successful' });
+    const token = jwt.sign({ id: student._id, role: 'student' }, process.env.JWT_SECRET, { expiresIn: '1d' });
+    res.cookie('token', token, { httpOnly: true });
+    res.status(200).json({ message: 'Login successful', token });
   } catch (error) {
     console.error('Error in loginStudent:', error);
     res.status(500).json({ message: 'Internal server error' });
@@ -91,11 +98,16 @@ const loginStudent = async (req, res) => {
 const profile = async (req, res) => {
   try {
     const { studentId } = req.params;
+    if (req.student._id.toString() !== studentId) {
+      return res.status(403).json({ message: 'You can only view your own profile' });
+    }
     const student = await Student.findById(studentId);
     if (!student) {
       return res.status(404).json({ message: 'Student not found' });
     }
-    res.status(200).json(student);
+    const studentData = student.toObject();
+    delete studentData.password;
+    res.status(200).json(studentData);
   } catch (error) {
     console.error('Error in profile:', error);
     res.status(500).json({ message: 'Internal server error' });
