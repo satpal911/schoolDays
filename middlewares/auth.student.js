@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-const Student = require('../models/student.model.js')
+import {Student} from '../models/student.model.js'
 
 const studentAuthentication = async (req, res, next) => {
   try {

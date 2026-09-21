@@ -10,7 +10,7 @@ const port = process.env.PORT || 5000;
 import studentRouter from './routes/student.routes.js';
 import adminRouter from './routes/admin.routes.js';
 import directorRouter from './routes/director.routes.js';
-
+import schoolRouter from './routes/school.routes.js';
 
 app.use(cookieParser());
 app.use(express.json());
@@ -19,6 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/v1/students', studentRouter);
 app.use('/api/v1/admin', adminRouter);
 app.use('/api/v1/director', directorRouter);
+app.use('/api/v1/schools', schoolRouter);
 connectDb()
 .then(() => {
     try{

@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-const Director = require('../director.model')
+import { Director } from '../models/director.model.js'
 
 const directorAuthentication = async (req, res, next) => {
   try {

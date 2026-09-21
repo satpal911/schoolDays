@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-const Teacher = require('../models/teacher.model.js')
+import { Teacher } from '../models/director.model.js'
 
 const teacherAuthentication = async (req, res, next) => {
   try {

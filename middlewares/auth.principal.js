@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-const Principal = require('../models/principal.model')
+import { Principal } from '../models/director.model.js'
 
 const principalAuthentication = async (req, res, next) => {
   try {
