@@ -1,5 +1,5 @@
 import express from "express";
-import { addTeacher, loginTeacher, logoutTeacher } from "../database/controllers/teacher.controller.js";
+import { addTeacher, loginTeacher, logoutTeacher } from "../controllers/teacher.controller.js";
 import principalAuthentication from "../middlewares/auth.principal.js";
 const teacherRouter = express.Router();
 
