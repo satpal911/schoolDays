@@ -111,4 +111,108 @@ const logoutAdmin = async (req, res) => {
     res.status(200).json({ message: 'Admin logged out successfully' });
 };
 
-export { registerAdmin, loginAdmin, logoutAdmin };
+const getAdminProfile = async (req, res) => {
+    try {
+        const admin = await Admin.findById(req.admin._id)
+            .select('-password')
+            .populate('school', 'name');
+
+        if (!admin) {
+            return res.status(404).json({ message: 'Admin not found' });
+        }
+
+        res.status(200).json({ data: admin });
+    } catch (error) {
+        console.error('Error in getAdminProfile:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+const updateAdminProfile = async (req, res) => {
+    try {
+        const { name, email, contactNumber, image, password } = req.body || {};
+        const updates = {};
+
+        if (name !== undefined) {
+            if (typeof name !== 'string' || !name.trim()) {
+                return res.status(400).json({ message: 'Name must be a non-empty string' });
+            }
+            updates.name = name.trim();
+        }
+
+        if (email !== undefined) {
+            if (typeof email !== 'string' || !email.trim()) {
+                return res.status(400).json({ message: 'Email must be a non-empty string' });
+            }
+            updates.email = email.trim().toLowerCase();
+        }
+
+        if (contactNumber !== undefined) {
+            updates.contactNumber = contactNumber;
+        }
+
+        if (image !== undefined) {
+            updates.image = image;
+        }
+
+        if (password !== undefined) {
+            if (typeof password !== 'string' || password.length < 6) {
+                return res.status(400).json({ message: 'Password must be at least 6 characters' });
+            }
+            updates.password = await bcrypt.hash(password, 10);
+        }
+
+        if (updates.email) {
+            const existingAdmin = await Admin.findOne({
+                email: updates.email,
+                _id: { $ne: req.admin._id }
+            });
+            if (existingAdmin) {
+                return res.status(400).json({ message: 'Admin with this email already exists' });
+            }
+        }
+
+        if (Object.keys(updates).length === 0) {
+            return res.status(400).json({ message: 'At least one profile field is required' });
+        }
+
+        const admin = await Admin.findByIdAndUpdate(
+            req.admin._id,
+            { $set: updates },
+            { returnDocument: "after", runValidators: true }
+        ).select('-password').populate('school', 'name');
+
+        if (!admin) {
+            return res.status(404).json({ message: 'Admin not found' });
+        }
+
+        res.status(200).json({ message: 'Admin profile updated successfully', data: admin });
+    } catch (error) {
+        console.error('Error in updateAdminProfile:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+const deleteAdminProfile = async (req, res) => {
+    try {
+        const admin = await Admin.findByIdAndDelete(req.admin._id);
+        if (!admin) {
+            return res.status(404).json({ message: 'Admin not found' });
+        }
+
+        res.clearCookie('token');
+        res.status(200).json({ message: 'Admin profile deleted successfully' });
+    } catch (error) {
+        console.error('Error in deleteAdminProfile:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+export {
+    registerAdmin,
+    loginAdmin,
+    logoutAdmin,
+    getAdminProfile,
+    updateAdminProfile,
+    deleteAdminProfile
+};
