@@ -114,4 +114,100 @@ const profile = async (req, res) => {
   }
 }
 
-export { registerStudent, loginStudent, profile };
+const getStudentProfile = async (req, res) => {
+  try {
+    const student = await Student.findById(req.student._id)
+      .select('-password')
+      .populate('studentClass', 'name')
+      .populate('school', 'name')
+      .populate('incharge', 'name employeeId');
+    if (!student) {
+      return res.status(404).json({ message: 'Student not found' });
+    }
+
+    res.status(200).json({ data: student });
+  } catch (error) {
+    console.error('Error in getStudentProfile:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
+const updateStudentProfile = async (req, res) => {
+  try {
+    const {
+      name,
+      image,
+      fatherName,
+      motherName,
+      dateOfBirth,
+      gender,
+      address,
+      contactNumber,
+      email,
+      password
+    } = req.body || {};
+    const updates = {};
+
+    if (name !== undefined) updates.name = name;
+    if (image !== undefined) updates.image = image;
+    if (fatherName !== undefined) updates.fatherName = fatherName;
+    if (motherName !== undefined) updates.motherName = motherName;
+    if (dateOfBirth !== undefined) updates.dateOfBirth = dateOfBirth;
+    if (gender !== undefined) updates.gender = gender;
+    if (address !== undefined) updates.address = address;
+    if (contactNumber !== undefined) updates.contactNumber = contactNumber;
+    if (email !== undefined) updates.email = email;
+    if (password !== undefined) {
+      if (typeof password !== 'string' || password.length < 6) {
+        return res.status(400).json({ message: 'Password must be at least 6 characters' });
+      }
+      updates.password = await bcrypt.hash(password, 10);
+    }
+
+    if (Object.keys(updates).length === 0) {
+      return res.status(400).json({ message: 'At least one profile field is required' });
+    }
+
+    const student = await Student.findByIdAndUpdate(
+      req.student._id,
+      { $set: updates },
+      { new: true, runValidators: true }
+    )
+      .select('-password')
+      .populate('studentClass', 'name')
+      .populate('school', 'name')
+      .populate('incharge', 'name employeeId');
+    if (!student) {
+      return res.status(404).json({ message: 'Student not found' });
+    }
+
+    res.status(200).json({ message: 'Student profile updated successfully', data: student });
+  } catch (error) {
+    console.error('Error in updateStudentProfile:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
+const deleteStudentProfile = async (req, res) => {
+  try {
+    const student = await Student.findByIdAndDelete(req.student._id);
+    if (!student) {
+      return res.status(404).json({ message: 'Student not found' });
+    }
+
+    res.clearCookie('token');
+    res.status(200).json({ message: 'Student profile deleted successfully' });
+  } catch (error) {
+    console.error('Error in deleteStudentProfile:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
+export {
+  registerStudent,
+  loginStudent,
+  profile,
+  getStudentProfile,
+  updateStudentProfile,
+  deleteStudentProfile
+};

@@ -19,6 +19,11 @@ const sectionSchema = new mongoose.Schema({
     type: String,
     enum: ['A', 'B', 'C', 'D', 'E'],
     required: true
+  },
+  class: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'StudentClass',
+    required: true
   }
 });
 
