@@ -1,14 +1,10 @@
-import PrincipalLogin from '../pages/PrincipalLogin';
-import PrincipalRegister from '../pages/PrincipalRegister';
+import TeacherRegister from '../pages/TeacherRegister';
 
 const principalRoutes = [
+	
 	{
-		path: '/principal/login',
-		element: <PrincipalLogin />
-	},
-	{
-		path: '/principal/register',
-		element: <PrincipalRegister />
+		path: 'register',
+		element: <TeacherRegister />
 	}
 ];
 

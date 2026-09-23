@@ -3,11 +3,11 @@ import DirectorRegister from '../pages/DirectorRegister';
 
 const directorRoutes = [
 	{
-		path: '/director/login',
+		path: 'dashboard',
 		element: <DirectorLogin />
 	},
 	{
-		path: '/director/register',
+		path: 'addSchool',
 		element: <DirectorRegister />
 	}
 ];

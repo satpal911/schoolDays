@@ -1,14 +1,10 @@
-import TeacherLogin from '../pages/TeacherLogin';
-import TeacherRegister from '../pages/TeacherRegister';
+import StudentRegister from '../pages/StudentRegister';
 
 const teacherRoutes = [
+
 	{
-		path: '/teacher/login',
-		element: <TeacherLogin />
-	},
-	{
-		path: '/teacher/register',
-		element: <TeacherRegister />
+		path: 'register',
+		element: <StudentRegister />
 	}
 ];
 

@@ -4,8 +4,7 @@ function DirectorRegister() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    password: "",
-    school: ""
+    password: ""
   });
 
   const handleChange = (e) => {
