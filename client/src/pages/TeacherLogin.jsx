@@ -72,9 +72,7 @@ function TeacherLogin() {
 
           <p className='text-center text-sm text-slate-400 mt-4'>
             Don't have a teacher account?{' '}
-            <span className='text-indigo-400 font-medium hover:underline cursor-pointer transition duration-150'>
-              Register here
-            </span>
+            Contact Principal
           </p>
         </form>
       </div>

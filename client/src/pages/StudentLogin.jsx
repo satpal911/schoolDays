@@ -38,7 +38,32 @@ function StudentLogin() {
 
         <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
           <div>
-            <label className='block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2'>Email Address</label>
+            <label className='block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2'>school</label>
+            <input 
+              type="email"
+              placeholder="student@school.com"
+              name="email"
+              value={formData.email}
+              onChange={handleChange} 
+              className='w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition duration-200 text-sm'
+              required
+            />
+          </div>
+          <div>
+            <label className='block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2'>class</label>
+            <input 
+              type="email"
+              placeholder="student@school.com"
+              name="email"
+              value={formData.email}
+              onChange={handleChange} 
+              className='w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition duration-200 text-sm'
+              required
+            />
+          </div>
+
+          <div>
+            <label className='block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2'>roll no.</label>
             <input 
               type="email"
               placeholder="student@school.com"
@@ -72,9 +97,7 @@ function StudentLogin() {
 
           <p className='text-center text-sm text-slate-400 mt-4'>
             Don't have a student account?{' '}
-            <span className='text-violet-400 font-medium hover:underline cursor-pointer transition duration-150'>
-              Register here
-            </span>
+            Contact your class teacher
           </p>
         </form>
       </div>

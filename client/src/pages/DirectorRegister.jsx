@@ -19,7 +19,7 @@ function DirectorRegister() {
     e.preventDefault();
     try {
       console.log("Director registration successful:", formData);
-      setFormData({ name: "", email: "", password: "", school: "" });
+      setFormData({ name: "", email: "", password: "" });
     } catch (error) {
       console.log("Submission error:", error);
     }
@@ -53,7 +53,7 @@ function DirectorRegister() {
           </div>
 
           <div>
-            <label className='block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2'>Email Address</label>
+            <label className='block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2'>Email</label>
             <input 
               type="email"
               placeholder="director@institution.com"
@@ -74,19 +74,6 @@ function DirectorRegister() {
               value={formData.password}
               onChange={handleChange} 
               className='w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition duration-200 text-sm'
-              required
-            />
-          </div>
-
-          <div>
-            <label className='block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2'>Institution Network</label>
-            <input 
-              type="text"
-              placeholder="Greenwood Educational Trust"
-              name="school"
-              value={formData.school}
-              onChange={handleChange} 
-              className='w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition duration-200 text-sm mb-2'
               required
             />
           </div>

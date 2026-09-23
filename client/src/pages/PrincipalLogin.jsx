@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 
 function PrincipalLogin() {
   const [formData, setFormData] = useState({
-    email: "",
-    password: ""
+    employeeId: "",
+    password: "",
+    school: ""
   });
 
   const handleChange = (e) => {
@@ -17,7 +18,7 @@ function PrincipalLogin() {
     e.preventDefault();
     try {
       console.log("Principal login credentials submitted:", formData);
-      setFormData({ email: "", password: "" });
+      setFormData({ employeeId: "", password: "" });
     } catch (error) {
       console.log("Login error:", error);
     }
@@ -38,14 +39,27 @@ function PrincipalLogin() {
 
         <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
           <div>
-            <label className='block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2'>Email Address</label>
+            <label className='block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2'>Employee Id</label>
             <input 
-              type="email"
-              placeholder="principal@school.com"
-              name="email"
-              value={formData.email}
+              type="employeeId"
+              placeholder="411100"
+              name="employeeId"
+              value={formData.employeeId}
               onChange={handleChange} 
               className='w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition duration-200 text-sm'
+              required
+            />
+          </div>
+
+          <div>
+            <label className='block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2'>School / Institution Name</label>
+            <input 
+              type="text"
+              placeholder="Greenwood High School"
+              name="school"
+              value={formData.school}
+              onChange={handleChange} 
+              className='w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200 text-sm mb-2'
               required
             />
           </div>
@@ -72,9 +86,7 @@ function PrincipalLogin() {
 
           <p className='text-center text-sm text-slate-400 mt-4'>
             Don't have a principal account?{' '}
-            <span className='text-cyan-400 font-medium hover:underline cursor-pointer transition duration-150'>
-              Register here
-            </span>
+            Contact your Admin
           </p>
         </form>
       </div>

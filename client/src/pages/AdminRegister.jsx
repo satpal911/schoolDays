@@ -53,7 +53,7 @@ function AdminRegister() {
           </div>
 
           <div>
-            <label className='block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2'>Email Address</label>
+            <label className='block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2'>Email</label>
             <input 
               type="email"
               placeholder="admin@school.com"

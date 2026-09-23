@@ -5,7 +5,9 @@ function TeacherRegister() {
     name: "",
     email: "",
     password: "",
-    school: ""
+    school: "",
+    employeeId:"",
+    subject:""
   });
 
   const handleChange = (e) => {
@@ -46,6 +48,32 @@ function TeacherRegister() {
               placeholder="Jane Doe"
               name="name"
               value={formData.name}
+              onChange={handleChange} 
+              className='w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-200 text-sm'
+              required
+            />
+          </div>
+
+          <div>
+            <label className='block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2'>Employee Id</label>
+            <input 
+              type="text"
+              placeholder="Jane Doe"
+              name="employeeId"
+              value={formData.employeeId}
+              onChange={handleChange} 
+              className='w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-200 text-sm'
+              required
+            />
+          </div>
+
+          <div>
+            <label className='block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2'>Subject</label>
+            <input 
+              type="text"
+              placeholder="Jane Doe"
+              name="subject"
+              value={formData.subject}
               onChange={handleChange} 
               className='w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-200 text-sm'
               required
@@ -98,12 +126,6 @@ function TeacherRegister() {
             Register Teacher
           </button>
 
-          <p className='text-center text-sm text-slate-400 mt-4'>
-            Already have an account?{' '}
-            <span className='text-indigo-400 font-medium hover:underline cursor-pointer transition duration-150'>
-              Login here
-            </span>
-          </p>
         </form>
       </div>
     </div>

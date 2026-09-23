@@ -38,7 +38,7 @@ function DirectorLogin() {
 
         <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
           <div>
-            <label className='block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2'>Email Address</label>
+            <label className='block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2'>Email</label>
             <input 
               type="email"
               placeholder="director@institution.com"

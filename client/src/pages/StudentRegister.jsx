@@ -66,6 +66,110 @@ function StudentRegister() {
           </div>
 
           <div>
+            <label className='block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2'>Father's Name</label>
+            <input 
+              type="text"
+              placeholder="Alex Smith"
+              name="name"
+              value={formData.name}
+              onChange={handleChange} 
+              className='w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition duration-200 text-sm'
+              required
+            />
+          </div>
+
+          <div>
+            <label className='block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2'>mother's name</label>
+            <input 
+              type="text"
+              placeholder="Alex Smith"
+              name="name"
+              value={formData.name}
+              onChange={handleChange} 
+              className='w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition duration-200 text-sm'
+              required
+            />
+          </div>
+
+          <div>
+            <label className='block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2'>d.o.b</label>
+            <input 
+              type="text"
+              placeholder="Alex Smith"
+              name="name"
+              value={formData.name}
+              onChange={handleChange} 
+              className='w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition duration-200 text-sm'
+              required
+            />
+          </div>
+
+          <div>
+            <label className='block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2'>gender</label>
+            <input 
+              type="text"
+              placeholder="Alex Smith"
+              name="name"
+              value={formData.name}
+              onChange={handleChange} 
+              className='w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition duration-200 text-sm'
+              required
+            />
+          </div>
+
+          <div>
+            <label className='block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2'>contact</label>
+            <input 
+              type="text"
+              placeholder="Alex Smith"
+              name="name"
+              value={formData.name}
+              onChange={handleChange} 
+              className='w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition duration-200 text-sm'
+              required
+            />
+          </div>
+
+          <div>
+            <label className='block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2'>address</label>
+            <input 
+              type="text"
+              placeholder="Alex Smith"
+              name="name"
+              value={formData.name}
+              onChange={handleChange} 
+              className='w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition duration-200 text-sm'
+              required
+            />
+          </div>
+
+          <div>
+            <label className='block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2'>class</label>
+            <input 
+              type="text"
+              placeholder="Alex Smith"
+              name="name"
+              value={formData.name}
+              onChange={handleChange} 
+              className='w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition duration-200 text-sm'
+              required
+            />
+          </div>
+
+          <div>
+            <label className='block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2'>section</label>
+            <input 
+              type="text"
+              placeholder="Alex Smith"
+              name="name"
+              value={formData.name}
+              onChange={handleChange} 
+              className='w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition duration-200 text-sm'
+              required
+            />
+          </div>
+
+          <div>
             <label className='block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2'>Password</label>
             <input 
               type="password"
@@ -98,12 +202,6 @@ function StudentRegister() {
             Register Student
           </button>
 
-          <p className='text-center text-sm text-slate-400 mt-4'>
-            Already have an account?{' '}
-            <span className='text-violet-400 font-medium hover:underline cursor-pointer transition duration-150'>
-              Login here
-            </span>
-          </p>
         </form>
       </div>
     </div>

@@ -53,12 +53,12 @@ function PrincipalRegister() {
           </div>
 
           <div>
-            <label className='block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2'>Email Address</label>
+            <label className='block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2'>Employee Id</label>
             <input 
               type="email"
-              placeholder="principal@school.com"
+              placeholder="741053"
               name="email"
-              value={formData.email}
+              value={formData.employeeId}
               onChange={handleChange} 
               className='w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition duration-200 text-sm'
               required
@@ -98,12 +98,6 @@ function PrincipalRegister() {
             Register Principal
           </button>
 
-          <p className='text-center text-sm text-slate-400 mt-4'>
-            Already have an account?{' '}
-            <span className='text-cyan-400 font-medium hover:underline cursor-pointer transition duration-150'>
-              Login here
-            </span>
-          </p>
         </form>
       </div>
     </div>

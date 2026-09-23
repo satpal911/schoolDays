@@ -1,25 +1,16 @@
-
-import Navbar from './components/Navbar'
-import AdminLogin from './pages/AdminLogin'
-import AdminRegister from './pages/AdminRegister'
-import DirectorLogin from './pages/DirectorLogin'
-import DirectorRegister from './pages/DirectorRegister'
-import PrincipalLogin from './pages/PrincipalLogin'
-import PrincipalRegister from './pages/PrincipalRegister'
-import StudentLogin from './pages/StudentLogin'
-import StudentRegister from './pages/StudentRegister'
-import TeacherLogin from './pages/TeacherLogin'
-import TeacherRegister from './pages/TeacherRegister'
+import { useRoutes } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import allRoutes from './routes/allRoutes';
 
 function App() {
+  const routes = useRoutes(allRoutes);
 
   return (
     <>
-    <Navbar/>
-    <DirectorLogin/>
-    
+      <Navbar />
+      {routes}
     </>
-  )
+  );
 }
 
-export default App
+export default App;
