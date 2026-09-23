@@ -14,6 +14,8 @@ const studentClassSchema = new mongoose.Schema({
 },
 { timestamps: true });
 
+studentClassSchema.index({ school: 1, name: 1 }, { unique: true });
+
 const sectionSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -27,6 +29,8 @@ const sectionSchema = new mongoose.Schema({
   }
 });
 
-const section = mongoose.model('Section', sectionSchema);
+  sectionSchema.index({ class: 1, name: 1 }, { unique: true });
+
+  export const Section = mongoose.model('Section', sectionSchema);
 
 export const studentClass = mongoose.model('StudentClass', studentClassSchema);

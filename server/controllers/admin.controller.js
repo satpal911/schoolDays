@@ -115,7 +115,7 @@ const getAdminProfile = async (req, res) => {
     try {
         const admin = await Admin.findById(req.admin._id)
             .select('-password')
-            .populate('school', 'name');
+            .populate('school', 'name affiliatedBoard');
 
         if (!admin) {
             return res.status(404).json({ message: 'Admin not found' });

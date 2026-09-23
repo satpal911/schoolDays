@@ -86,7 +86,7 @@ const getTeacherProfile = async (req, res) => {
     try {
         const teacher = await Teacher.findById(req.teacher._id)
             .select('-password')
-            .populate('school', 'name');
+            .populate('school', 'name affiliatedBoard');
         if (!teacher) {
             return res.status(404).json({ message: 'Teacher not found' });
         }

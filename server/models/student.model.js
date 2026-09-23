@@ -26,20 +26,27 @@ const studentSchema = new mongoose.Schema({
     },
     gender: {
     type: String,
-    enum: ['Male', 'Female', 'Other']
+    enum: ['Male', 'Female', 'Other'],
+    required: true
     },
     address: {
     type: String
     },
     contactNumber: {
-        type: Number
+        type: Number,
+        required: true
     },
     email: {
     type: String
     },
     studentClass: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'studentClass',
+        ref: 'StudentClass',
+        required: true
+    },
+    section: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Section',
         required: true
     },
     school: {
@@ -57,5 +64,10 @@ const studentSchema = new mongoose.Schema({
     }
 },
 { timestamps: true });
+
+studentSchema.index(
+    { school: 1, studentClass: 1, section: 1, rollNumber: 1 },
+    { unique: true }
+);
 
 export const Student = mongoose.model('Student', studentSchema);

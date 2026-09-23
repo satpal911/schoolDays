@@ -15,7 +15,7 @@ principalRouter.post("/register", adminAuthentication, addPrincipal);
 principalRouter.post("/login", loginPrincipal);
 principalRouter.post("/logout", logoutPrincipal);
 principalRouter.get("/profile", principalAuthentication, getPrincipalProfile);
-principalRouter.patch("/profile", principalAuthentication, updatePrincipalProfile);
-principalRouter.delete("/profile", principalAuthentication, deletePrincipalProfile);
+principalRouter.patch("/profile", adminAuthentication, updatePrincipalProfile);
+principalRouter.delete("/profile", adminAuthentication, deletePrincipalProfile);
 
 export default principalRouter;

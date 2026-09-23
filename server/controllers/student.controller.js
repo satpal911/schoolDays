@@ -3,25 +3,32 @@ import cloudinary from "../utils/cloudinary.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import {School} from "../models/school.model.js";
-import { studentClass as StudentClass } from "../models/studentClass.model.js";
+import { studentClass as StudentClass, Section } from "../models/studentClass.model.js";
 
 const registerStudent = async (req, res) => {
   try {
-    const { name, rollNumber, fatherName, motherName, dateOfBirth, studentClass, password } = req.body || {};
-    if(!name || !rollNumber || !fatherName || !motherName || !dateOfBirth || !studentClass || !password ) {
+    const {
+      name,
+      rollNumber,
+      fatherName,
+      motherName,
+      dateOfBirth,
+      gender,
+      contactNumber,
+      studentClass,
+      section,
+      password
+    } = req.body || {};
+    if(!name || !rollNumber || !fatherName || !motherName || !dateOfBirth || !gender || !contactNumber || !studentClass || !section || !password ) {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
     if(isNaN(rollNumber)){
         return res.status(400).json({ message: 'Roll number must be a number' });       
     }
+    const normalizedRollNumber = String(rollNumber).trim();
     if(!(isNaN(fatherName)) || !(isNaN(motherName))){
         return res.status(400).json({ message: 'Father and Mother names must be strings' });       
-    }
-
-    const existingStudent = await Student.findOne({ rollNumber });
-    if (existingStudent) {
-      return res.status(400).json({ message: 'Student with this roll number already exists' });
     }
 
     const schoolId = req.teacher.school;
@@ -35,17 +42,38 @@ const registerStudent = async (req, res) => {
       existStudentClass = await StudentClass.create({ name: studentClass, school: schoolId });
     }
 
+    const existSection = await Section.findOneAndUpdate(
+      { class: existStudentClass._id, name: section },
+      { $setOnInsert: { class: existStudentClass._id, name: section } },
+      { new: true, upsert: true }
+    );
+
+    const existingStudent = await Student.findOne({
+      school: schoolId,
+      studentClass: existStudentClass._id,
+      section: existSection._id,
+      rollNumber: normalizedRollNumber
+    });
+    if (existingStudent) {
+      return res.status(400).json({
+        message: 'A student with this roll number already exists in this class'
+      });
+    }
+
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newStudent = new Student({
       name,
-      rollNumber,
+      rollNumber: normalizedRollNumber,
       fatherName,
       motherName,
       dateOfBirth,
+      gender,
+      contactNumber,
       school: existSchool._id,
       studentClass: existStudentClass._id,
+      section: existSection._id,
       password: hashedPassword
     });
 
@@ -55,6 +83,11 @@ const registerStudent = async (req, res) => {
     res.status(201).json({ message: 'Student registered successfully' });
   } catch (error) {
     console.error('Error in registerStudent:', error);
+    if (error.code === 11000) {
+      return res.status(400).json({
+        message: 'A student with this roll number already exists in this class and school'
+      });
+    }
     res.status(500).json({ message: 'Internal server error' });
   }
 }
@@ -63,18 +96,35 @@ console.log(registerStudent)
 
 const loginStudent = async (req, res) => {
   try {
-    const { studentClass,rollNumber, password } = req.body;
-    if(!studentClass || !rollNumber || !password) {
-      return res.status(400).json({ message: 'All fields are required' });
+    const { school, studentClass, section, rollNumber, password } = req.body;
+    if(!school || !studentClass || !section || !rollNumber || !password) {
+      return res.status(400).json({ message: 'School, class, section, roll number and password are required' });
     }
 
-    const classRecord = await StudentClass.findOne({ name: studentClass });
+    const schoolRecord = await School.findOne({ name: school });
+    if (!schoolRecord) {
+      return res.status(400).json({ message: 'Invalid school' });
+    }
+
+    const classRecord = await StudentClass.findOne({
+      name: studentClass,
+      school: schoolRecord._id
+    });
     if (!classRecord) {
       return res.status(400).json({ message: 'Invalid class' });
     }
 
+    const sectionRecord = await Section.findOne({
+      class: classRecord._id,
+      name: section
+    });
+    if (!sectionRecord) {
+      return res.status(400).json({ message: 'Invalid section' });
+    }
+
     const student = await Student.findOne({
       studentClass: classRecord._id,
+      section: sectionRecord._id,
       rollNumber
     });
     if (!student) {
@@ -119,6 +169,7 @@ const getStudentProfile = async (req, res) => {
     const student = await Student.findById(req.student._id)
       .select('-password')
       .populate('studentClass', 'name')
+      .populate('section', 'name')
       .populate('school', 'name')
       .populate('incharge', 'name employeeId');
     if (!student) {

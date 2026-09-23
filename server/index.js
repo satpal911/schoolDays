@@ -15,6 +15,7 @@ import schoolRouter from './routes/school.routes.js';
 import principalRouter from './routes/principal.routes.js';
 import teacherRouter from './routes/teacher.routes.js';
 import attendanceRouter from './routes/attendance.routes.js';
+import classRouter from './routes/class.routes.js';
 
 app.use(cookieParser());
 app.use(express.json());
@@ -27,6 +28,7 @@ app.use('/api/v1/schools', schoolRouter);
 app.use('/api/v1/principal', principalRouter);
 app.use('/api/v1/teachers', teacherRouter);
 app.use('/api/v1/attendance', attendanceRouter);
+app.use('/api/v1/classes', classRouter);
 connectDb()
 .then(() => {
     try{
