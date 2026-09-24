@@ -1,9 +1,10 @@
 import AdminRegister from '../pages/AdminRegister';
+import AdminDashboard from '../pages/AdminDashboard';
 
 const adminRoutes = [
   {
     path: 'dashboard',
-    element: <div className="p-6 text-white">Admin Dashboard</div>,
+    element: <AdminDashboard />,
   },
   {
     path: 'register',

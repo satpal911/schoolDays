@@ -1,9 +1,10 @@
 import StudentRegister from '../pages/StudentRegister';
+import StudentDashboard from '../pages/StudentDashboard';
 
 const studentRoutes = [
   {
     path: 'dashboard',
-    element: <div className="p-6 text-white">Student Dashboard</div>,
+    element: <StudentDashboard />,
   },
   {
     path: 'register',

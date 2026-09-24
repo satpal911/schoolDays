@@ -1,13 +1,27 @@
-import PrincipalRegister from '../pages/PrincipalRegister';
+import PrincipalDashboard from '../pages/PrincipalDashboard';
+import TeacherRegister from '../pages/TeacherRegister';
+import AllTeachers from './AllTeachers';
 
 const principalRoutes = [
   {
     path: 'dashboard',
-    element: <div className="p-6 text-white">Principal Dashboard</div>,
+    element: <PrincipalDashboard />,
   },
   {
-    path: 'register',
-    element: <PrincipalRegister />,
+    path: 'add-teacher',
+    element: <TeacherRegister/>
+  },
+  {
+    path: 'all-teachers',
+    element: <AllTeachers/>
+  },
+  {
+    path: 'about',
+    element: <AllTeachers/>
+  },
+  {
+    path: 'settings',
+    element: <AllTeachers/>
   },
 ];
 

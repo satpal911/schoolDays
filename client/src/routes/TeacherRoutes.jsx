@@ -1,9 +1,10 @@
 import TeacherRegister from '../pages/TeacherRegister';
+import TeacherDashboard from '../pages/TeacherDashboard';
 
 const teacherRoutes = [
   {
     path: 'dashboard',
-    element: <div className="p-6 text-white">Teacher Dashboard</div>,
+    element: <TeacherDashboard />,
   },
   {
     path: 'register',

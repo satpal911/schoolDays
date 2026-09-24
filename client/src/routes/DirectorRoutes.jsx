@@ -1,9 +1,10 @@
 import DirectorRegister from '../pages/DirectorRegister';
+import DirectorDashboard from '../pages/DirectorDashboard';
 
 const directorRoutes = [
   {
     path: 'dashboard',
-    element: <div className="p-6 text-white">Director Dashboard</div>,
+    element: <DirectorDashboard />,
   },
   {
     path: 'addSchool',

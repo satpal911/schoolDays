@@ -11,11 +11,13 @@ import AdminLogin from "../pages/AdminLogin";
 import PrincipalLogin from "../pages/PrincipalLogin";
 import TeacherLogin from "../pages/TeacherLogin";
 import StudentLogin from "../pages/StudentLogin";
+import DashboardLayout from "../components/DashboardLayout";
+import LandingPage from "../pages/LandingPage"
 
 export default function MasterRouter() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/director/login" replace />} />
+      <Route path="/" element={<LandingPage />} />
 
       <Route element={<PublicRoute />}>
         <Route path="/director/login" element={<DirectorLogin />} />
@@ -26,9 +28,11 @@ export default function MasterRouter() {
       </Route>
 
       <Route path="/director" element={<ProtectedRoute allowedRole="director" />}>
-        {directorRoutes.map((route, index) => (
-          <Route key={index} path={route.path} element={route.element} />
-        ))}
+        <Route element={<DashboardLayout role="director" />}>
+          {directorRoutes.map((route, index) => (
+            <Route key={index} path={route.path} element={route.element} />
+          ))}
+        </Route>
       </Route>
 
       <Route path="/admin" element={<ProtectedRoute allowedRole="admin" />}>
@@ -38,9 +42,11 @@ export default function MasterRouter() {
       </Route>
 
       <Route path="/principal" element={<ProtectedRoute allowedRole="principal" />}>
-        {principalRoutes.map((route, index) => (
-          <Route key={index} path={route.path} element={route.element} />
-        ))}
+        <Route element={<DashboardLayout role="principal" />}>
+          {principalRoutes.map((route, index) => (
+            <Route key={index} path={route.path} element={route.element} />
+          ))}
+        </Route>
       </Route>
 
       <Route path="/teacher" element={<ProtectedRoute allowedRole="teacher" />}>
