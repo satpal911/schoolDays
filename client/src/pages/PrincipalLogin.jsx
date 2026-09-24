@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useAuth } from '../context/AuthContext';
 
 function PrincipalLogin() {
   const [formData, setFormData] = useState({
@@ -7,6 +8,8 @@ function PrincipalLogin() {
     school: ""
   });
 
+  const { login, loading } = useAuth();
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -14,11 +17,15 @@ function PrincipalLogin() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      await login("principal", "", formData.password, {
+        employeeId: formData.employeeId,
+        school: formData.school,
+      });
       console.log("Principal login credentials submitted:", formData);
-      setFormData({ employeeId: "", password: "" });
+      setFormData({ employeeId: "", password: "", school: "" });
     } catch (error) {
       console.log("Login error:", error);
     }

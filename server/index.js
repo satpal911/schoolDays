@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import path from "path" 
 dotenv.config({ path: path.resolve(process.cwd(), '../.env') });
 import express from 'express';
-import  connectDb from './database/db.js';
+import connectDb from './database/db.js';
 import cookieParser from 'cookie-parser';
 const app = express();
 const port = process.env.PORT || 5000;
@@ -17,6 +17,30 @@ import teacherRouter from './routes/teacher.routes.js';
 import attendanceRouter from './routes/attendance.routes.js';
 import classRouter from './routes/class.routes.js';
 
+app.use((req, res, next) => {
+  const allowedOrigins = [
+    'http://localhost:5173',
+    'http://localhost:5174',
+    'http://127.0.0.1:5173',
+    'http://127.0.0.1:5174'
+  ];
+  const origin = req.headers.origin;
+
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(204);
+  }
+
+  next();
+});
+
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -29,6 +53,7 @@ app.use('/api/v1/principal', principalRouter);
 app.use('/api/v1/teachers', teacherRouter);
 app.use('/api/v1/attendance', attendanceRouter);
 app.use('/api/v1/classes', classRouter);
+
 connectDb()
 .then(() => {
     try{

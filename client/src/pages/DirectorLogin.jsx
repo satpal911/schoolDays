@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
+import toast from "react-hot-toast";
+import { useAuth } from '../context/AuthContext';
 
 function DirectorLogin() {
   const [formData, setFormData] = useState({
     email: "",
     password: ""
   });
+
+  const { login, loading } = useAuth();
 
   const handleChange = (e) => {
     setFormData({
@@ -13,13 +17,15 @@ function DirectorLogin() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log("Director login credentials submitted:", formData);
+      await login("director", formData.email, formData.password);
+      toast.success("Director logged in successfully");
       setFormData({ email: "", password: "" });
     } catch (error) {
       console.log("Login error:", error);
+      toast.error(error || "Login failed");
     }
   };
 

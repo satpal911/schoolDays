@@ -2,58 +2,29 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const API = import.meta.env.VITE_API_URL || "http://localhost:5000";
-
-const AuthContext = createContext();
+const API = (import.meta.env.VITE_API_URL || "http://localhost:3000").replace(/\/$/, "");
+const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
+
   const [user, setUser] = useState(null);
   const [role, setRole] = useState(() => localStorage.getItem("authRole"));
   const [token, setToken] = useState(() => localStorage.getItem("authToken"));
   const [loading, setLoading] = useState(true);
 
-  const register = async (name, email, password) => {
+  const register = useCallback(async (roleType, name, email, password, extraData = {}) => {
     try {
       setLoading(true);
+      const payload = { name, email, password, ...extraData };
       const res = await axios.post(
-        `${API}/api/v1/user/register`,
-        { name, email, password },
+        `${API}/api/v1/${roleType}/register`,
+        payload,
         { withCredentials: true },
       );
 
       const tokenData = res.data?.token;
-      const userData = res.data?.user || res.data;
-
-      if (tokenData) {
-        setToken(tokenData);
-        setRole("user");
-        setUser(userData);
-
-        localStorage.setItem("authToken", tokenData);
-        localStorage.setItem("authRole", "user");
-
-        navigate("/user/dashboard");
-      }
-      return res.data;
-    } catch (error) {
-      throw error.response?.data?.message || "Registration failed";
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const login = async (roleType, email, password) => {
-    try {
-      setLoading(true);
-      const res = await axios.post(
-        `${API}/api/v1/${roleType}/login`,
-        { email, password },
-        { withCredentials: true },
-      );
-
-      const tokenData = res.data?.token;
-      const userData = res.data?.[roleType] || res.data?.user || res.data;
+      const userData = res.data?.user || res.data?.data || res.data;
 
       if (tokenData) {
         setToken(tokenData);
@@ -65,13 +36,45 @@ export const AuthProvider = ({ children }) => {
 
         navigate(`/${roleType}/dashboard`);
       }
+
+      return res.data;
+    } catch (error) {
+      throw error.response?.data?.message || "Registration failed";
+    } finally {
+      setLoading(false);
+    }
+  }, [navigate]);
+
+  const login = useCallback(async (roleType, email, password, extraData = {}) => {
+    try {
+      setLoading(true);
+      const res = await axios.post(
+        `${API}/api/v1/${roleType}/login`,
+        { email, password, ...extraData },
+        { withCredentials: true },
+      );
+
+      const tokenData = res.data?.token;
+      const userData = res.data?.[roleType] || res.data?.user || res.data?.data || res.data;
+
+      if (tokenData) {
+        setToken(tokenData);
+        setRole(roleType);
+        setUser(userData);
+
+        localStorage.setItem("authToken", tokenData);
+        localStorage.setItem("authRole", roleType);
+
+        navigate(`/${roleType}/dashboard`);
+      }
+
       return res.data;
     } catch (error) {
       throw error.response?.data?.message || "Login failed";
     } finally {
       setLoading(false);
     }
-  };
+  }, [navigate]);
 
   const logout = useCallback(() => {
     setUser(null);
@@ -88,13 +91,14 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
         return;
       }
+
       try {
-        const res = await axios.get(`${API}/api/v1/${role}/me`, {
+        const res = await axios.get(`${API}/api/v1/${role}/profile`, {
           headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,
         });
 
-        setUser(res.data?.[role] || res.data);
+        setUser(res.data?.[role] || res.data?.user || res.data?.data || res.data);
       } catch (error) {
         console.error("Session restoration failed:", error);
         logout();
@@ -116,17 +120,20 @@ export const AuthProvider = ({ children }) => {
       register,
       logout,
     }),
-    [user, role, token, loading, logout],
+    [user, role, token, loading, login, register, logout],
   );
 
   return (
     <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
 };
+
 export const useAuth = () => {
   const context = useContext(AuthContext);
+
   if (!context) {
     throw new Error("useAuth must be wrapped in AuthProvider");
   }
+
   return context;
 };

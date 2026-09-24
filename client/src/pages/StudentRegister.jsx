@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
+import { useAuth } from '../context/AuthContext';
 
 function StudentRegister() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
-    school: ""
+    school: "",
   });
+
+  const { register, loading } = useAuth();
 
   const handleChange = (e) => {
     setFormData({
@@ -15,9 +18,12 @@ function StudentRegister() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      await register("student", formData.name, formData.email, formData.password, {
+        school: formData.school,
+      });
       console.log("Student registration successful:", formData);
       setFormData({ name: "", email: "", password: "", school: "" });
     } catch (error) {

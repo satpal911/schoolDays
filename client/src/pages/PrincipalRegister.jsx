@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
+import { useAuth } from '../context/AuthContext';
 
 function PrincipalRegister() {
   const [formData, setFormData] = useState({
     name: "",
-    email: "",
+    employeeId: "",
     password: "",
     school: ""
   });
+
+  const { register, loading } = useAuth();
 
   const handleChange = (e) => {
     setFormData({
@@ -15,11 +18,14 @@ function PrincipalRegister() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      await register("principal", formData.name, formData.employeeId, formData.password, {
+        school: formData.school,
+      });
       console.log("Principal registration successful:", formData);
-      setFormData({ name: "", email: "", password: "", school: "" });
+      setFormData({ name: "", employeeId: "", password: "", school: "" });
     } catch (error) {
       console.log("Submission error:", error);
     }
@@ -55,9 +61,9 @@ function PrincipalRegister() {
           <div>
             <label className='block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2'>Employee Id</label>
             <input 
-              type="email"
+              type="employeeId"
               placeholder="741053"
-              name="email"
+              name="employeeId"
               value={formData.employeeId}
               onChange={handleChange} 
               className='w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition duration-200 text-sm'

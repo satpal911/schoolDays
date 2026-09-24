@@ -5,7 +5,7 @@ export default function PublicRoute({ children }) {
   const { token, role, loading } = useAuth();
 
   if (loading) {
-    return <div className="spinner-loading">Loading...</div>; 
+    return <div className="spinner-loading">Loading...</div>;
   }
 
   if (token && role) {

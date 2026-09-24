@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
+import { useAuth } from '../context/AuthContext';
 
 function AdminLogin() {
   const [formData, setFormData] = useState({
     email: "",
-    password: ""
+    password: "",
+    school: ""
   });
+
+  const { login, loading } = useAuth();
 
   const handleChange = (e) => {
     setFormData({
@@ -13,11 +17,12 @@ function AdminLogin() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      await login("admin", formData.email, formData.password, { school: formData.school });
       console.log("Login credentials submitted:", formData);
-      setFormData({ email: "", password: "" });
+      setFormData({ email: "", password: "", school: "" });
     } catch (error) {
       console.log("Login error:", error);
     }

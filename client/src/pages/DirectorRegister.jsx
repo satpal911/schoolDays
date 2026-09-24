@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useAuth } from '../context/AuthContext';
 
 function DirectorRegister() {
   const [formData, setFormData] = useState({
@@ -7,6 +8,8 @@ function DirectorRegister() {
     password: ""
   });
 
+  const { register, loading } = useAuth();
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -14,9 +17,10 @@ function DirectorRegister() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      await register("director", formData.name, formData.email, formData.password);
       console.log("Director registration successful:", formData);
       setFormData({ name: "", email: "", password: "" });
     } catch (error) {
